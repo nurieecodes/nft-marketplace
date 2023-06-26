@@ -8,6 +8,21 @@ const hre = require("hardhat");
 
 async function main() {
 
+  const [deployer] = await ethers.getSigners();
+
+  console.log(`Deploying contracts with the account: ${deployer.address}`);
+  console.log("Account balance:", (await deployer.getBalance()).toString());
+
+  // Deploy NFT contract
+  const NFT = await ethers.getContractFactory("NFT");
+  const nft = await NFT.deploy();
+  console.log(`NFT contract deployed to: ${nft.address}`)
+
+  // Deploy Marketplace contract
+  const Marketplace = await ethers.getContractFactory("Marketplace");
+  const marketplace = await Marketplace.deploy(1);
+  console.log(`Marketplace contract deployed to: ${marketplace.address}`)
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
