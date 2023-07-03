@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract NFT is ERC721URIStorage {
     uint public tokenCount;
 
-    constructor() ERC721("BankOfGaming NFT", "BOG") {}
+    constructor() ERC721("Paradise NFT Collection", "PNC") {}
 
     function mint(string memory _tokenURI) external returns (uint) {
         tokenCount++;
