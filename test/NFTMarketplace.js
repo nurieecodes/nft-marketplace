@@ -62,7 +62,7 @@ describe("NFTMarketplace", async () => {
         });
     })
 
-    describe("Making marketplace items", async () => {
+    describe("Creating Marketplace Items", async () => {
         let price = 1
 
         describe('Success', async () => {
@@ -85,9 +85,8 @@ describe("NFTMarketplace", async () => {
                         customer1.address
                     )
 
-                // Owner of NFT should now be the marketplace
                 expect(await nft.ownerOf(1)).to.equal(marketplace.address);
-
+            
                 // Item count should now equal 1
                 expect (await marketplace.itemCount()).to.equal(1)
 
@@ -110,7 +109,7 @@ describe("NFTMarketplace", async () => {
         })
     })
 
-    describe("Purchasing marketplace items", async () => {
+    describe("Purchasing Marketplace Items", async () => {
         let price = 2
         let fee = (feePercent / 100) * price
         let totalPriceInWei
@@ -156,6 +155,35 @@ describe("NFTMarketplace", async () => {
                 // NFT should be marked as sold
                 expect((await marketplace.items(1)).sold).to.equal(true)
             })
+        })
+
+    describe('Failure', async () => {
+        beforeEach(async () => {
+            // Customer1 mints an NFT
+            await nft.connect(customer1).mint(URI)
+            // Customer1 approves marketplace to spend NFT
+            await nft.connect(customer1).setApprovalForAll(marketplace.address, true)
+            // Customer1 makes their NFT a marketplace item
+            await marketplace.connect(customer1).makeItem(nft.address, 1, toWei(price))
+        })
+
+        it("Should not be able to purchase NFT (invalid item ID) that doesn’t exist", async () => {
+            await expect(marketplace.connect(customer2).purchaseItem(2, { value: totalPriceInWei })).to.be.revertedWith("Item doesn't exist");
+            await expect(marketplace.connect(customer2).purchaseItem(0, { value: totalPriceInWei })).to.be.revertedWith("Item doesn't exist");
+        })
+
+        it("Should reject insufficient payment (not enough Ether to cover the item price + market fee)", async () => {
+            await expect(marketplace.connect(customer2).purchaseItem(1, { value: toWei(price) })).to.be.revertedWith("Not enough ether to cover item price and market fee");
+        })
+
+        it("Should not be able to purchase item that was already sold", async () => {
+            // Customer2 purchases Item 1
+            await marketplace.connect(customer2).purchaseItem(1, { value: totalPriceInWei })
+
+            // Deployer tries purchasing Item 1 after it's been sold
+            await expect(marketplace.connect(deployer).purchaseItem(1, { value: totalPriceInWei })).to.be.revertedWith("Item already sold");
+        })
+
         })
     })
 })
