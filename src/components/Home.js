@@ -42,7 +42,6 @@ const Home = ({ marketplace, nft }) => {
     useEffect(() => {
         loadMarketplaceItems()
     }, [])
-
     if (loading) return (
         <main style={{ padding: "1rem 0"}}>
             <h2>Loading...</h2>
@@ -66,7 +65,10 @@ const Home = ({ marketplace, nft }) => {
                                 </Card.Body>
                                 <Card.Footer>
                                     <div className='d-grid'>
-                                        <Button onClick={() => buyMarketItem(item)} variant="primary" size="lg">
+                                        <Button style={{ backgroundColor: '#9900cc', border: '#000000', borderRadius: 25 }} 
+                                                onClick={() => buyMarketItem(item)} 
+                                                variant="primary" 
+                                                size="lg">
                                             Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
                                         </Button>
                                     </div>
@@ -78,7 +80,9 @@ const Home = ({ marketplace, nft }) => {
             </div>
             : (
                 <main style={{ padding: "1rem 0"}}>
-                    <h4>You currently have no listed assets.</h4>
+                    <h4>Thank you for visiting Paradise NFT Marketplace!</h4>
+                    <h4>Sorry, this marketplace currently has no available assets to purchase.</h4>
+                    <h4>Please check back again soon.</h4>
                 </main>
             )}
         </div>

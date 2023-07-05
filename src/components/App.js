@@ -52,15 +52,23 @@ function App() {
         <Navigation web3Handler={web3Handler} account={account} />
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-            <Spinner animation="border" style={{ display: 'flex' }} />
+            <Spinner animation="border" style={{ display: 'flex'}} variant="danger"/>
             <p className='mx-3 my-0'>Awaiting Metamask Connection...</p>
           </div>
         ) : (
         <Routes>
-          <Route path="/" element={<Home marketplace={marketplace} nft={nft} />} />
-          <Route path="/create" element={<Create />} />
-          <Route path="/my-listed-items" element={<MyListedItem />} />
-          <Route path="/my-purchases" element={<MyPurchases />} />
+          <Route path="/" element={
+            <Home marketplace={marketplace} nft={nft} />
+          } />
+          <Route path="/create" element={
+            <Create marketplace={marketplace} nft={nft} />
+          } />
+          <Route path="/my-listed-item" element={
+          <MyListedItem marketplace={marketplace} nft={nft} account={account} />
+          } />
+          <Route path="/my-purchases" element={
+          <MyPurchases marketplace={marketplace} nft={nft} account={account} />
+          } />
         </Routes>
       )}
       </div>
