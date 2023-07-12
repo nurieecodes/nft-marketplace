@@ -1,8 +1,26 @@
 import { useState } from 'react'
 import { ethers } from "ethers"
 import { Row, Form, Button } from 'react-bootstrap'
-import {create as ipfsHttpClient } from 'ipfs-http-client'
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
+import { Buffer } from 'buffer';
+//import {create as ipfsHttpClient } from 'ipfs-http-client'
+
+//const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
+const { create } = require('ipfs-http-client')
+const key = process.env.REACT_APP_INFURA_PROJECT_ID;
+const secret = REACT_APP_INFURA_SECRET;
+
+const projectId = key;
+const projectSecret = secret;
+const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+
+const client = create({
+  host: 'infura-ipfs.io',
+  port: 5001,
+  protocol: 'https',
+  headers: {
+    authorization: auth,
+  },
+});
 
 const Create = ({ marketplace, nft }) => {
     const [image, setImage] = useState('')
@@ -17,7 +35,7 @@ const Create = ({ marketplace, nft }) => {
             try {
                 const result = await client.add(file)
                 console.log(result)
-                setImage(`https://ipfs.infura.io/ipfs/${result.path}`)
+                setImage(`https://pnm-nftmarketplace.infura-ipfs.io/ipfs/${result.path}`)
             } catch (error) {
                 console.log("IPFS image upload error: ", error)
             }
@@ -36,7 +54,7 @@ const Create = ({ marketplace, nft }) => {
     }
 
     const mintThenList = async (result) => {
-        const uri = `https://ipfs.infura.io/ipfs/${result.path}`
+        const uri = `https://pnm-nftmarketplace.infura-ipfs.io/ipfs/${result.path}`
         // Mint NFT
         await (await nft.mint(uri)).wait()
         // Get tokenId of new NFT
@@ -52,13 +70,11 @@ const Create = ({ marketplace, nft }) => {
             <div className="row">
                 <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '525px' }}>
                     <div className="content mx-auto">
+                        <Row>
+                            <h4 style={{ color: '#ff6666' }} >Upload your NFT to the marketplace</h4>
+                            <hr></hr>
+                        </Row>
                         <Row className="g-4">
-                            <Form.Control
-                                type="file"
-                                required
-                                name="file"
-                                onChange={uploadToIPFS}
-                            />
                             <Form.Control 
                             onChange={(e) => setName(e.target.value)} 
                             size="lg" 
@@ -75,12 +91,18 @@ const Create = ({ marketplace, nft }) => {
                             required type="number" 
                             placeholder="Price (in ETH)" 
                             />
+                            <Form.Control
+                            type="file"
+                            required
+                            name="file"
+                            onChange={uploadToIPFS}
+                            />
                             <div className="d-grid px-0">
                                 <Button style={{ backgroundColor: '#9900cc', border: '#000000', borderRadius: 25 }} 
                                         onClick={createNFT} 
                                         variant="primary" 
                                         size="lg">
-                                    List NFT for sale
+                                    List NFT
                                 </Button>
                             </div>
                         </Row>

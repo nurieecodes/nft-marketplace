@@ -18,7 +18,7 @@ const Navigation = ({ web3Handler, account }) => {
                 <Nav className="justify-content-center" style={{ flex: 1}}>
                     <Nav.Link as={Link} to="/" style={{color:"#ffffff"}}>Home</Nav.Link>
                     <Nav.Link as={Link} to="/create" style={{color:"#ffffff"}}>Create</Nav.Link>
-                    <Nav.Link as={Link} to="/my-listed-item" style={{color:"#ffffff"}}>Listed Items</Nav.Link>
+                    <Nav.Link as={Link} to="/my-listed-item" style={{color:"#ffffff"}}>My Listed Items</Nav.Link>
                     <Nav.Link as={Link} to="/my-purchases" style={{color:"#ffffff"}}>Purchased NFTs</Nav.Link>
                 </Nav>
                 <Nav>

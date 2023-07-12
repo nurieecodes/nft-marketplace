@@ -9,6 +9,7 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.0",
+    "buffer": "^6.0.3",
     "ganache-cli": "^6.12.2",
     "ipfs-http-client": "^56.0.1",
     "lodash": "^4.17.21",

@@ -77,6 +77,7 @@ const Home = ({ marketplace, nft }) => {
                         </Col>
                     ))}
                 </Row>
+                
             </div>
             : (
                 <main style={{ padding: "1rem 0"}}>
