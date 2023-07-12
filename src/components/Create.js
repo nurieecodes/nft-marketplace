@@ -2,19 +2,17 @@ import { useState } from 'react'
 import { ethers } from "ethers"
 import { Row, Form, Button } from 'react-bootstrap'
 import { Buffer } from 'buffer';
-//import {create as ipfsHttpClient } from 'ipfs-http-client'
 
-//const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 const { create } = require('ipfs-http-client')
 const key = process.env.REACT_APP_INFURA_PROJECT_ID;
-const secret = REACT_APP_INFURA_SECRET;
+const secret = process.env.REACT_APP_INFURA_SECRET;
 
 const projectId = key;
 const projectSecret = secret;
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
 
 const client = create({
-  host: 'infura-ipfs.io',
+  host: 'ipfs.infura.io',
   port: 5001,
   protocol: 'https',
   headers: {
@@ -55,6 +53,7 @@ const Create = ({ marketplace, nft }) => {
 
     const mintThenList = async (result) => {
         const uri = `https://pnm-nftmarketplace.infura-ipfs.io/ipfs/${result.path}`
+        console.log('metadata uri', uri)
         // Mint NFT
         await (await nft.mint(uri)).wait()
         // Get tokenId of new NFT
