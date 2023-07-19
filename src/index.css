@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+nav {
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  background: #000000;
+  box-shadow: 0 5px 10px #ccc;
+}
+
+/* Basic styles for nav links */
+nav a {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 100%;
+  text-decoration: none;
+}
+
+/* Specific styles for non-active links */
+.link {
+  color: white;
+}
+
+
+.content {
+  text-align: center;
+}

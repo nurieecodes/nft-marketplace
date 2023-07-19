@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card } from 'react-bootstrap'
+import icon from '../ethereum-icon.png'
 
 export default function MyPurchases({ marketplace, nft, account }) {
   const [loading, setLoading] = useState(true)
@@ -51,7 +52,8 @@ export default function MyPurchases({ marketplace, nft, account }) {
               <Col key={idx} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top" src={item.image} />
-                  <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
+                  <Card.Footer>Bought for {ethers.utils.formatEther(item.totalPrice)} ETH 
+                  <img style={{ padding: '1px 1px 2px 1px'}}  src={icon} width="23" height="23" alt="" /></Card.Footer>
                 </Card>
               </Col>
             ))}

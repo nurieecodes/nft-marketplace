@@ -1,18 +1,23 @@
 import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card } from 'react-bootstrap'
+import icon from '../ethereum-icon.png'
 
 function renderSoldItems(items) {
     return (
       <>
-        <h2>Sold NFTs</h2>
+        <h3 style={{ padding: '40px 0px 0px 0px' }}>Sold NFTs</h3>
+        <hr></hr>
         <Row xs={1} md={2} lg={4} className="g-4 py-3">
           {items.map((item, idx) => (
             <Col key={idx} className="overflow-hidden">
               <Card>
                 <Card.Img variant="top" src={item.image} />
                 <Card.Footer>
-                  For {ethers.utils.formatEther(item.totalPrice)} ETH - Recieved {ethers.utils.formatEther(item.price)} ETH
+                  Sold for {ethers.utils.formatEther(item.totalPrice)} ETH 
+                  <img style={{ padding: '1px 1px 2px 1px'}} src={icon} width="23" height="23" alt="" />
+                  <hr></hr> Received {ethers.utils.formatEther(item.price)} ETH
+                  <img style={{ padding: '1px 1px 2px 1px'}} src={icon} width="23" height="23" alt="" />
                 </Card.Footer>
               </Card>
             </Col>
@@ -72,13 +77,16 @@ export default function MyListedItem({ marketplace, nft, account }) {
         <div className="flex justify-center">
           {listedItems.length > 0 ?
             <div className="px-5 py-3 container">
-                <h2>Listed NFTs</h2>
+                <h3 style={{ padding: '35px 0px 0px 0px' }}>Listed NFTs</h3>
+                <hr></hr>
               <Row xs={1} md={2} lg={4} className="g-4 py-3">
                 {listedItems.map((item, idx) => (
                   <Col key={idx} className="overflow-hidden">
                     <Card>
                       <Card.Img variant="top" src={item.image} />
-                      <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
+                      <Card.Footer>Listed Price: {ethers.utils.formatEther(item.totalPrice)} ETH
+                      <img style={{ padding: '1px 1px 2px 1px'}} src={icon} width="23" height="23" alt="" />
+                      </Card.Footer>
                     </Card>
                   </Col>
                 ))}

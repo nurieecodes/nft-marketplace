@@ -48,7 +48,8 @@ function App() {
   }
   return (
     <HashRouter>
-      <div className="App">
+      <div className="App" style={{ backgroundColor: '#ffe6e6', height: '1500px' }}
+        >
         <Navigation web3Handler={web3Handler} account={account} />
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>

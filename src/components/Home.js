@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card, Button } from 'react-bootstrap'
+import icon from '../ethereum-icon.png'
 
 const Home = ({ marketplace, nft }) => {
     const [items, setItems] = useState([])
@@ -53,10 +54,14 @@ const Home = ({ marketplace, nft }) => {
         <div className="flex justify-center">
             {items.length > 0 ?
             <div className="px-5 container">
+                <Row>
+                    <h3 style={{padding: '35px 10px 0px 10px'}}>Welcome to Paradise NFT Marketplace!</h3>
+                    <h4>Please browse the items for sale below.</h4>
+                </Row>
                 <Row xs={1} md={2} lg={4} className="g-4 py-5">
                     {items.map((item, idx) => (
                         <Col key={idx} className="overflow-hidden">
-                            <Card>
+                            <Card border="dark">
                                 <Card.Img variant="top" src={item.image} />
                                 <Card.Body color="secondary">
                                     <Card.Title>{item.name}</Card.Title>
@@ -66,11 +71,13 @@ const Home = ({ marketplace, nft }) => {
                                 </Card.Body>
                                 <Card.Footer>
                                     <div className='d-grid'>
-                                        <Button style={{ backgroundColor: '#9900cc', border: '#000000', borderRadius: 25 }} 
+                                        <Button style={{ backgroundColor: '#ff6666', color: '#000000', border: '#000000', 
+                                                         borderRadius: 25, padding: '5px', width: '190px' }} 
                                                 onClick={() => buyMarketItem(item)} 
                                                 variant="primary" 
-                                                size="lg">
-                                            Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
+                                                className="mx-auto">
+                                            Buy for {ethers.utils.formatEther(item.totalPrice)} ETH 
+                                            <img style={{ padding: '1px 1px 2px 1px'}} src={icon} width="23" height="23" alt="" />
                                         </Button>
                                     </div>
                                 </Card.Footer>

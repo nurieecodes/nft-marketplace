@@ -48,6 +48,7 @@ const Create = ({ marketplace, nft }) => {
 
         } catch(error) {
             console.log("IPFS URI upload error: ", error)
+            alert("There was an error uploading your NFT!");
         }
     }
 
@@ -63,6 +64,8 @@ const Create = ({ marketplace, nft }) => {
         // Add NFT to marketplace
         const listingPrice = ethers.utils.parseEther(price.toString())
         await (await marketplace.makeItem(nft.address, id, listingPrice)).wait()
+
+        alert("Successfully listed your NFT!");
     }
     return (
         <div className="container-fluid mt-5">
@@ -70,7 +73,7 @@ const Create = ({ marketplace, nft }) => {
                 <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '525px' }}>
                     <div className="content mx-auto">
                         <Row>
-                            <h4 style={{ color: '#ff6666' }} >Upload your NFT to the marketplace</h4>
+                            <h3 style={{ color: '#9900cc', padding: '0px 10px 15px 10px' }} >Upload your NFT to the Marketplace</h3>
                             <hr></hr>
                         </Row>
                         <Row className="g-4">
@@ -97,10 +100,12 @@ const Create = ({ marketplace, nft }) => {
                             onChange={uploadToIPFS}
                             />
                             <div className="d-grid px-0">
-                                <Button style={{ backgroundColor: '#9900cc', border: '#000000', borderRadius: 25 }} 
+                                <Button style={{ backgroundColor: '#9900cc', color: "#ffffff", border: '#000000', 
+                                                 borderRadius: 25, padding: '5px', width: '250px' }} 
                                         onClick={createNFT} 
                                         variant="primary" 
-                                        size="lg">
+                                        size="lg"
+                                        className="mx-auto">
                                     List NFT
                                 </Button>
                             </div>
