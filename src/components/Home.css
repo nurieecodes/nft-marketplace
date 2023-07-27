@@ -1,0 +1,16 @@
+@keyframes blinking {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .blinking-stat {
+    animation: blinking 2s infinite; /* Adjust the duration as per your preference */
+  }
+  

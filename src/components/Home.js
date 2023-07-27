@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ethers } from "ethers"
 import { Row, Col, Card, Button, Modal, Carousel } from 'react-bootstrap'
 import icon from '../ethereum-icon.png'  
+import './Home.css';
 
 import image1 from '../images/image1.png';
 import image2 from '../images/image2.png';
@@ -15,6 +16,10 @@ const Home = ({ marketplace, nft }) => {
     const [items, setItems] = useState([])
     const [loading, setLoading] = useState(true)
 
+    // State variables to capture statistics
+    const [totalListedNFTs, setTotalListedNFTs] = useState(0);
+    const [totalSoldNFTs, setTotalSoldNFTs] = useState(0);
+
     // Variable for rerouting to the My Purchased Items page after successfully purchasing an NFT
     const navigate = useNavigate();
 
@@ -24,6 +29,8 @@ const Home = ({ marketplace, nft }) => {
     const loadMarketplaceItems = async () => {
         const itemCount = await marketplace.itemCount()
         let items = []
+        let totalSold = 0; // To keep track of the total sold NFTs
+
         for (let i = 1; i <= itemCount; i++) {
             const item = await marketplace.items(i)
             if (!item.sold) {
@@ -44,9 +51,14 @@ const Home = ({ marketplace, nft }) => {
                     description: metadata.description,
                     image: metadata.image
                 })
+            } else {
+                totalSold++;
             }
         }
         setItems(items)
+        // Update the statistics state variables
+        setTotalListedNFTs(items.length); // Only count the listed NFTs, not sold ones
+        setTotalSoldNFTs(totalSold);
         setLoading(false)
     }
 
@@ -77,8 +89,15 @@ const Home = ({ marketplace, nft }) => {
     };
 
     useEffect(() => {
-        loadMarketplaceItems()
-    }, [])
+        loadMarketplaceItems();
+
+        // Set up an interval to periodically update the statistics (e.g., every 10 seconds)
+        const interval = setInterval(loadMarketplaceItems, 10000);
+
+        // Clear the interval when the component is unmounted
+        return () => clearInterval(interval);
+    }, []);
+
     if (loading) return (
         <main style={{ padding: '50px 10px 15px 10px' }}>
             <h4 style={{ fontFamily: 'Droid serif, serif' }}>
@@ -178,6 +197,14 @@ const Home = ({ marketplace, nft }) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
+                <Row style={{ padding: '150px 10px 15px 10px'}}>
+                        <h5 style={{ fontFamily: 'Droid serif, serif' }}>
+                            Total # of NFTs listed: <span className="blinking-stat">{totalListedNFTs}</span>
+                        </h5>
+                        <h5 style={{ fontFamily: 'Droid serif, serif' }}>
+                            Total # of NFTs sold: <span className="blinking-stat">{totalSoldNFTs}</span>
+                        </h5>
+                    </Row>
 
             </div>
             : (
@@ -207,6 +234,14 @@ const Home = ({ marketplace, nft }) => {
                         <h4 style={{ fontFamily: 'Droid serif, serif' }}>
                             Please check back again soon.</h4>
                     </main>
+                    <Row style={{ padding: '150px 10px 15px 10px'}}>
+                        <h5 style={{ fontFamily: 'Droid serif, serif' }}>
+                            Total # of NFTs listed: <span className="blinking-stat">{totalListedNFTs}</span>
+                        </h5>
+                        <h5 style={{ fontFamily: 'Droid serif, serif' }}>
+                            Total # of NFTs sold: <span className="blinking-stat">{totalSoldNFTs}</span>
+                        </h5>
+                    </Row>
                 </div>
             )}
         </div>
