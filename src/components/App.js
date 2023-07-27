@@ -3,7 +3,6 @@ import { ethers } from "ethers"
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Spinner } from 'react-bootstrap'
 
-import logo from '../logo.png';
 import './App.css';
 
 // Components 

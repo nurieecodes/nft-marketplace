@@ -1,12 +1,26 @@
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { ethers } from "ethers"
-import { Row, Col, Card, Button } from 'react-bootstrap'
-import icon from '../ethereum-icon.png'
+import { Row, Col, Card, Button, Modal, Carousel } from 'react-bootstrap'
+import icon from '../ethereum-icon.png'  
+
+import image1 from '../images/image1.png';
+import image2 from '../images/image2.png';
+import image3 from '../images/image3.png';
+import image8 from '../images/image8.png';
+import image19 from '../images/image19.png';
+
 
 const Home = ({ marketplace, nft }) => {
     const [items, setItems] = useState([])
     const [loading, setLoading] = useState(true)
+
+    // Variable for rerouting to the My Purchased Items page after successfully purchasing an NFT
+    const navigate = useNavigate();
+
+    // Array for the carousel that appears when there are no listed items available for purchase
+    const carouselImages = [image1, image2, image3, image8, image19]
+
     const loadMarketplaceItems = async () => {
         const itemCount = await marketplace.itemCount()
         let items = []
@@ -39,14 +53,37 @@ const Home = ({ marketplace, nft }) => {
     const buyMarketItem = async (item) => {
         await (await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })).wait()
         loadMarketplaceItems()
+
+        // Redirect to My Purchased Items page
+        navigate('/my-purchases');
     }
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedNFT, setSelectedNFT] = useState(null);
+    const [ownerAddress, setOwnerAddress] = useState('');
+
+    const handleShowModal = async (item) => {
+        setSelectedNFT(item);
+        setShowModal(true);
+
+        // Fetch the NFT owner's address
+        const owner = await nft.ownerOf(item.itemId);
+        setOwnerAddress(owner);
+    };
+    
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedNFT(null);
+    };
 
     useEffect(() => {
         loadMarketplaceItems()
     }, [])
     if (loading) return (
-        <main style={{ padding: "1rem 0"}}>
-            <h2>Loading...</h2>
+        <main style={{ padding: '50px 10px 15px 10px' }}>
+            <h4 style={{ fontFamily: 'Droid serif, serif' }}>
+                Loading...
+            </h4>
         </main>
     )
 
@@ -55,29 +92,43 @@ const Home = ({ marketplace, nft }) => {
             {items.length > 0 ?
             <div className="px-5 container">
                 <Row>
-                    <h3 style={{padding: '35px 10px 0px 10px'}}>Welcome to Paradise NFT Marketplace!</h3>
-                    <h4>Please browse the items for sale below.</h4>
+                    <h3 style={{ padding: '35px 10px 0px 10px', 
+                                fontFamily: 'Georgia, arial, serif' }}>
+                                Welcome to Paradise NFT Marketplace!
+                    </h3>
+                    <h4 style={{ fontFamily: 'Droid serif, serif' }}>
+                        Please browse the items for sale below.
+                    </h4>
                 </Row>
                 <Row xs={1} md={2} lg={4} className="g-4 py-5">
                     {items.map((item, idx) => (
                         <Col key={idx} className="overflow-hidden">
                             <Card border="dark">
-                                <Card.Img variant="top" src={item.image} />
+                                <Card.Img 
+                                    variant="top" 
+                                    src={item.image}
+                                />
                                 <Card.Body color="secondary">
                                     <Card.Title>{item.name}</Card.Title>
                                     <Card.Text>
-                                        {item.description}
+                                    <Button variant="link" onClick={() => handleShowModal(item)}>
+                                        View NFT Details
+                                    </Button>
                                     </Card.Text>
                                 </Card.Body>
                                 <Card.Footer>
                                     <div className='d-grid'>
-                                        <Button style={{ backgroundColor: '#ff6666', color: '#000000', border: '#000000', 
-                                                         borderRadius: 25, padding: '5px', width: '190px' }} 
+                                        <Button style={{ backgroundColor: '#ff6666', color: '#000000', 
+                                                         border: '#000000', borderRadius: 25, 
+                                                         padding: '5px', width: '190px' }} 
                                                 onClick={() => buyMarketItem(item)} 
                                                 variant="primary" 
                                                 className="mx-auto">
                                             Buy for {ethers.utils.formatEther(item.totalPrice)} ETH 
-                                            <img style={{ padding: '1px 1px 2px 1px'}} src={icon} width="23" height="23" alt="" />
+                                            <img style={{ padding: '1px 1px 2px 1px'}} 
+                                                 src={icon} width="23" 
+                                                 height="23" alt="" 
+                                            />
                                         </Button>
                                     </div>
                                 </Card.Footer>
@@ -85,14 +136,78 @@ const Home = ({ marketplace, nft }) => {
                         </Col>
                     ))}
                 </Row>
-                
+                <Modal show={showModal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title style={{ color: "#9900cc"}}>NFT Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {selectedNFT && (
+                        <>
+                            <h5 style={{ textAlign: 'center' }}>Name: {selectedNFT.name}</h5>
+                            <br></br>
+                            <p>Description: 
+                                <br></br>
+                                {selectedNFT.description}
+                            </p>
+                            <br></br>
+                            <p>Price: {ethers.utils.formatEther(selectedNFT.totalPrice)} ETH
+                            <img style={{ padding: '1px 1px 2px 1px'}} 
+                                 src={icon} width="23" 
+                                 height="23" alt="" 
+                            />
+                            </p>
+                            <br></br>
+                            <p>
+                                Owner's Address:{' '}
+                                <a href={`https://etherscan.io/address/${ownerAddress}`}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {ownerAddress}
+                                </a>
+                            </p>
+                        </>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button style={{ backgroundColor: '#ff6666', 
+                                        color: "#000000", border: '#000000', 
+                                        borderRadius: 25, padding: '5px', width: '75px' }} 
+                                variant="primary" 
+                                onClick={handleCloseModal}>
+                        Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
             </div>
             : (
-                <main style={{ padding: "1rem 0"}}>
-                    <h4>Thank you for visiting Paradise NFT Marketplace!</h4>
-                    <h4>Sorry, this marketplace currently has no available assets to purchase.</h4>
-                    <h4>Please check back again soon.</h4>
-                </main>
+                <div className="px-5 container">
+                    <h2 style={{ padding: '50px 10px 0px 10px', 
+                                fontFamily: 'Georgia, arial, serif' }}>
+                                Welcome to Paradise NFT Marketplace!
+                    </h2>
+                    <Carousel style={{ padding: '50px 10px 15px 10px' }}
+                              autoplay={true} 
+                              pauseOnVisibility={true} 
+                              slideshowSpeed={5000}>
+                              {carouselImages.map((image, idx) => (
+                        <Carousel.Item key={idx}>
+                            <img src={image} alt={`Carousel Image ${idx + 1}`} 
+                            style={{ borderRadius: '25%', 
+                                     border: '2px solid black', 
+                                     width: "400px", height: "400px" }}/>
+                        </Carousel.Item>
+                        ))}
+                    </Carousel>
+                    <main style={{ padding: '50px 10px 15px 10px' }}>
+                        <h4 style={{ fontFamily: 'Droid serif, serif' }}>
+                            Thank you for visiting our marketplace.</h4>
+                        <h4 style={{ fontFamily: 'Droid serif, serif' }}>
+                            We currently have no available items to purchase.</h4>
+                        <h4 style={{ fontFamily: 'Droid serif, serif' }}>
+                            Please check back again soon.</h4>
+                    </main>
+                </div>
             )}
         </div>
     );

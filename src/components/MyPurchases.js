@@ -1,9 +1,28 @@
 import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
-import { Row, Col, Card } from 'react-bootstrap'
+import { Row, Col, Card, Button, Modal } from 'react-bootstrap'
 import icon from '../ethereum-icon.png'
 
 export default function MyPurchases({ marketplace, nft, account }) {
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedNFT, setSelectedNFT] = useState(null);
+  const [ownerAddress, setOwnerAddress] = useState('');
+
+  const handleShowModal = async (item) => {
+    setSelectedNFT(item);
+    setShowModal(true);
+
+  // Fetch the NFT owner's address
+  const owner = await nft.ownerOf(item.itemId);
+  setOwnerAddress(owner);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedNFT(null);
+  };
+
   const [loading, setLoading] = useState(true)
   const [purchases, setPurchases] = useState([])
   const loadPurchasedItems = async () => {
@@ -39,8 +58,8 @@ export default function MyPurchases({ marketplace, nft, account }) {
     loadPurchasedItems()
   }, [])
   if (loading) return (
-    <main style={{ padding: "1rem 0" }}>
-      <h2>Loading...</h2>
+    <main style={{ padding: '50px 10px 15px 10px' }}>
+      <h4>Loading...</h4>
     </main>
   )
   return (
@@ -50,18 +69,79 @@ export default function MyPurchases({ marketplace, nft, account }) {
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
             {purchases.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
-                <Card>
+                <Card border="dark">
                   <Card.Img variant="top" src={item.image} />
-                  <Card.Footer>Bought for {ethers.utils.formatEther(item.totalPrice)} ETH 
-                  <img style={{ padding: '1px 1px 2px 1px'}}  src={icon} width="23" height="23" alt="" /></Card.Footer>
+                  <Card.Body color="secondary">
+                                    <Card.Title>{item.name}</Card.Title>
+                                    <Card.Text>
+                                      <Button variant="link" onClick={() => handleShowModal(item)}>
+                                          View NFT Details
+                                      </Button>
+                                    </Card.Text>
+                                </Card.Body>
+                  <Card.Footer style={{ backgroundColor: "#df80ff", color: "#000000"}}>Bought for {ethers.utils.formatEther(item.totalPrice)} ETH 
+                    <img style={{ padding: '1px 1px 2px 1px'}}  
+                        src={icon} width="23" 
+                        height="23" alt="" />
+                  </Card.Footer>
                 </Card>
               </Col>
             ))}
           </Row>
+          <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title style={{ color: '#9900cc' }}>NFT Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedNFT && (
+                      <>
+                        <h5 style={{ textAlign: 'center' }}>Name: {selectedNFT.name}</h5>
+                        <br></br>
+                        <p>Description: 
+                          <br></br>
+                          {selectedNFT.description}
+                        </p>
+                        <br></br>
+                        <p>
+                          Price: {ethers.utils.formatEther(selectedNFT.totalPrice)} ETH
+                          <img style={{ padding: '1px 1px 2px 1px' }} 
+                               src={icon} width="23" 
+                               height="23" alt="" 
+                          />
+                        </p>
+                        <br></br>
+                        <p>
+                          Owner's Address:{' '}
+                          <a href={`https://etherscan.io/address/${ownerAddress}`}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            {ownerAddress}
+                          </a>
+                        </p>
+                      </>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                      style={{
+                        backgroundColor: '#ff6666',
+                        color: '#000000', border: '#000000',
+                        borderRadius: 25, padding: '5px',
+                        width: '75px',
+                      }}
+                      variant="primary"
+                      onClick={handleCloseModal}
+                    >
+                      Close
+                    </Button>
+                </Modal.Footer>
+              </Modal>
         </div>
         : (
-          <main style={{ padding: "1rem 0" }}>
-            <h4>No purchased NFTs</h4>
+          <main style={{ padding: '50px 10px 15px 10px' }}>
+            <h4 style={{ fontFamily: 'Droid serif, serif' }}>
+              You currently have no purchased items.
+            </h4>
           </main>
         )}
     </div>

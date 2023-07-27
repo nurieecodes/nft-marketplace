@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { ethers } from "ethers"
-import { Row, Form, Button } from 'react-bootstrap'
+import { Row, Form, Button, Alert } from 'react-bootstrap'
 import { Buffer } from 'buffer';
 
 const { create } = require('ipfs-http-client')
@@ -20,11 +21,41 @@ const client = create({
   },
 });
 
-const Create = ({ marketplace, nft }) => {
+const Create = ({ marketplace, nft, successText = 'Congratulations! Your NFT has been listed successfully!', 
+                    failureText = 'There was an error listing your NFT. Please try again.' }) => {
     const [image, setImage] = useState('')
     const [price, setPrice] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
+    const [successMessage, setSuccessMessage] = useState('');
+    const [failureMessage, setFailureMessage] = useState('');
+    const [validationAttempted, setValidationAttempted] = useState(false);
+
+    // New state variables for managing alert visibility
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [showFailureAlert, setShowFailureAlert] = useState(false);
+    
+
+    // New effect to hide alerts after a certain duration
+    useEffect(() => {
+        if (showSuccessAlert || showFailureAlert) {
+        const timer = setTimeout(() => {
+            setShowSuccessAlert(false);
+            setShowFailureAlert(false);
+        }, 3000); // 3000 milliseconds (3 seconds) - adjust the duration as needed
+        return () => clearTimeout(timer);
+        }
+    }, [showSuccessAlert, showFailureAlert]);
+
+    const navigate = useNavigate();
+
+    const resetForm = () => {
+            setImage('');
+            setPrice(null);
+            setName('');
+            setDescription('');
+      };
+      
 
     const uploadToIPFS = async (event) => {
         event.preventDefault()
@@ -41,14 +72,22 @@ const Create = ({ marketplace, nft }) => {
     }
 
     const createNFT = async () => {
-        if (!image || !price || !name || !description) return
+        setValidationAttempted(true);
+        if (!image || !price || !name || !description) {
+            alert("Please fill in all of the required fields.");
+            return;
+        }
         try {
             const result = await client.add(JSON.stringify({ image, price, name, description }))
-            mintThenList(result)
+            await mintThenList(result);
+
+            // Show success alert on successful listing
+            setShowSuccessAlert(true);
 
         } catch(error) {
             console.log("IPFS URI upload error: ", error)
-            alert("There was an error uploading your NFT!");
+            // Show failure alert on error
+            setShowFailureAlert(true);
         }
     }
 
@@ -61,11 +100,27 @@ const Create = ({ marketplace, nft }) => {
         const id = await nft.tokenCount()
         // Approve marketplace to spend NFT
         await (await nft.setApprovalForAll(marketplace.address, true)).wait()
-        // Add NFT to marketplace
-        const listingPrice = ethers.utils.parseEther(price.toString())
-        await (await marketplace.makeItem(nft.address, id, listingPrice)).wait()
 
-        alert("Successfully listed your NFT!");
+        try {
+
+            // Add NFT to marketplace
+            const listingPrice = ethers.utils.parseEther(price.toString())
+            await (await marketplace.makeItem(nft.address, id, listingPrice)).wait()
+
+            // Reset the form fields
+            resetForm();
+
+            // Set the success message
+            setSuccessMessage(successText);
+
+            // Redirect to the home page after a successful listing
+            navigate('/');
+
+        } catch (error) {
+            console.log("Failed to list NFT:", error);
+            setFailureMessage(failureText);
+        }
+        
     }
     return (
         <div className="container-fluid mt-5">
@@ -73,35 +128,52 @@ const Create = ({ marketplace, nft }) => {
                 <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '525px' }}>
                     <div className="content mx-auto">
                         <Row>
-                            <h3 style={{ color: '#9900cc', padding: '0px 10px 15px 10px' }} >Upload your NFT to the Marketplace</h3>
+                            <h3 style={{ color: '#9900cc', padding: '0px 10px 15px 10px', 
+                                         fontFamily: 'Georgia, arial, serif' }}>
+                                         Upload your NFT to the Marketplace
+                            </h3>
                             <hr></hr>
                         </Row>
                         <Row className="g-4">
                             <Form.Control 
                             onChange={(e) => setName(e.target.value)} 
                             size="lg" 
-                            required type="text" 
+                            type="text" 
                             placeholder="Name" 
+                            style={{ border: validationAttempted && name === '' 
+                                                ? '1px solid red' : '1px solid gray' }}
                             />
-                            <Form.Control onChange={(e) => setDescription(e.target.value)} 
+                            <Form.Control 
+                            onChange={(e) => setDescription(e.target.value)} 
                             size="lg" 
-                            required as="textarea" 
+                            as="textarea" 
                             placeholder="Description" 
+                            style={{ border: validationAttempted && description === '' 
+                                                ? '1px solid red' : '1px solid gray' }}
                             />
-                            <Form.Control onChange={(e) => setPrice(e.target.value)} 
+                            <Form.Control 
+                            onChange={(e) => setPrice(e.target.value)} 
                             size="lg" 
-                            required type="number" 
+                            type="number" 
                             placeholder="Price (in ETH)" 
+                            style={{ border: (validationAttempted && price === null) || 
+                                             (validationAttempted && price === '') 
+                                             ? '1px solid red' : '1px solid gray' }}
                             />
                             <Form.Control
                             type="file"
-                            required
                             name="file"
                             onChange={uploadToIPFS}
+                            style={{ border: validationAttempted && image === '' 
+                                                ? '1px solid red' : '1px solid gray' }}
                             />
                             <div className="d-grid px-0">
-                                <Button style={{ backgroundColor: '#9900cc', color: "#ffffff", border: '#000000', 
-                                                 borderRadius: 25, padding: '5px', width: '250px' }} 
+                                <Button style={{ backgroundColor: '#9900cc', 
+                                                 color: "#ffffff", 
+                                                 border: '#000000', 
+                                                 borderRadius: 25, 
+                                                 padding: '5px', 
+                                                 width: '250px'}} 
                                         onClick={createNFT} 
                                         variant="primary" 
                                         size="lg"
@@ -109,6 +181,16 @@ const Create = ({ marketplace, nft }) => {
                                     List NFT
                                 </Button>
                             </div>
+                            {showSuccessAlert && (
+                                <Alert variant="success" className="mt-3 text-center">
+                                    <h5>{successMessage}</h5>
+                                </Alert>
+                            )}
+                            {showFailureAlert && (
+                                <Alert variant="danger" className="mt-3 text-center">
+                                    <h5>{failureMessage}</h5>
+                                </Alert>
+                            )}
                         </Row>
                     </div>
                 </main>
