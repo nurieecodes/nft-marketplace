@@ -199,10 +199,10 @@ const Home = ({ marketplace, nft }) => {
                 </Modal>
                 <Row style={{ padding: '150px 10px 15px 10px'}}>
                         <h5 style={{ fontFamily: 'Droid serif, serif' }}>
-                            Total # of NFTs listed: <span className="blinking-stat">{totalListedNFTs}</span>
+                            Total # of NFTs available for sale: <span className="blinking-stat">{totalListedNFTs}</span>
                         </h5>
                         <h5 style={{ fontFamily: 'Droid serif, serif' }}>
-                            Total # of NFTs sold: <span className="blinking-stat">{totalSoldNFTs}</span>
+                            Total # of NFTs sold on the marketplace: <span className="blinking-stat">{totalSoldNFTs}</span>
                         </h5>
                     </Row>
 
@@ -236,10 +236,10 @@ const Home = ({ marketplace, nft }) => {
                     </main>
                     <Row style={{ padding: '150px 10px 15px 10px'}}>
                         <h5 style={{ fontFamily: 'Droid serif, serif' }}>
-                            Total # of NFTs listed: <span className="blinking-stat">{totalListedNFTs}</span>
+                            Total # of NFTs available for sale: <span className="blinking-stat">{totalListedNFTs}</span>
                         </h5>
                         <h5 style={{ fontFamily: 'Droid serif, serif' }}>
-                            Total # of NFTs sold: <span className="blinking-stat">{totalSoldNFTs}</span>
+                            Total # of NFTs sold on the marketplace: <span className="blinking-stat">{totalSoldNFTs}</span>
                         </h5>
                     </Row>
                 </div>

@@ -36,9 +36,12 @@ function renderSoldItems(items) {
 
 export default function MyListedItem({ marketplace, nft, account }) {
 
+    const [loading, setLoading] = useState(true)  
     const [showModal, setShowModal] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState(null);
     const [ownerAddress, setOwnerAddress] = useState('');
+    const [listedItems, setListedItems] = useState([])
+    const [soldItems, setSoldItems] = useState([])
 
     const handleShowModal = async (item) => {
       setSelectedNFT(item);
@@ -54,9 +57,6 @@ export default function MyListedItem({ marketplace, nft, account }) {
       setSelectedNFT(null);
     };
 
-    const [loading, setLoading] = useState(true)
-    const [listedItems, setListedItems] = useState([])
-    const [soldItems, setSoldItems] = useState([])
     const loadListedItems = async () => {
       
         // Load all sold NFTS that the user listed
