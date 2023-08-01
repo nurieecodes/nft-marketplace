@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ethers } from "ethers"
-import { Row, Form, Button, Alert } from 'react-bootstrap'
+import { Row, Form, Button } from 'react-bootstrap'
 import { Buffer } from 'buffer';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { create } = require('ipfs-http-client')
 const key = process.env.REACT_APP_INFURA_PROJECT_ID;
@@ -21,31 +23,13 @@ const client = create({
   },
 });
 
-const Create = ({ marketplace, nft, successText = 'Congratulations! Your NFT has been listed successfully!', 
-                    failureText = 'There was an error listing your NFT. Please try again.' }) => {
+const Create = ({ marketplace, nft }) => {
+
     const [image, setImage] = useState('')
     const [price, setPrice] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [successMessage, setSuccessMessage] = useState('');
-    const [failureMessage, setFailureMessage] = useState('');
     const [validationAttempted, setValidationAttempted] = useState(false);
-
-    // New state variables for managing alert visibility
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const [showFailureAlert, setShowFailureAlert] = useState(false);
-    
-
-    // New effect to hide alerts after a certain duration
-    useEffect(() => {
-        if (showSuccessAlert || showFailureAlert) {
-        const timer = setTimeout(() => {
-            setShowSuccessAlert(false);
-            setShowFailureAlert(false);
-        }, 3000); // 3000 milliseconds (3 seconds) - adjust the duration as needed
-        return () => clearTimeout(timer);
-        }
-    }, [showSuccessAlert, showFailureAlert]);
 
     const navigate = useNavigate();
 
@@ -81,13 +65,35 @@ const Create = ({ marketplace, nft, successText = 'Congratulations! Your NFT has
             const result = await client.add(JSON.stringify({ image, price, name, description }))
             await mintThenList(result);
 
-            // Show success alert on successful listing
-            setShowSuccessAlert(true);
+            // Show success toast on successful listing
+            toast.success('Congratulations! Your NFT has been listed successfully!', {
+                position: 'top-center',
+                autoClose: 3200,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+
+        // Delay the redirection after showing the success alert
+        setTimeout(() => {
+            navigate('/');
+        }, 1500);
 
         } catch(error) {
             console.log("IPFS URI upload error: ", error)
-            // Show failure alert on error
-            setShowFailureAlert(true);
+
+            // Show failure toast on error
+            toast.error('There was an error listing your NFT. Please try again.', {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
         }
     }
 
@@ -110,15 +116,11 @@ const Create = ({ marketplace, nft, successText = 'Congratulations! Your NFT has
             // Reset the form fields
             resetForm();
 
-            // Set the success message
-            setSuccessMessage(successText);
-
             // Redirect to the home page after a successful listing
             navigate('/');
 
         } catch (error) {
             console.log("Failed to list NFT:", error);
-            setFailureMessage(failureText);
         }
         
     }
@@ -181,20 +183,11 @@ const Create = ({ marketplace, nft, successText = 'Congratulations! Your NFT has
                                     List NFT
                                 </Button>
                             </div>
-                            {showSuccessAlert && (
-                                <Alert variant="success" className="mt-3 text-center">
-                                    <h5>{successMessage}</h5>
-                                </Alert>
-                            )}
-                            {showFailureAlert && (
-                                <Alert variant="danger" className="mt-3 text-center">
-                                    <h5>{failureMessage}</h5>
-                                </Alert>
-                            )}
                         </Row>
                     </div>
                 </main>
             </div>
+          <ToastContainer />
         </div>
     );
 }

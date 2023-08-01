@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ethers } from "ethers"
 import { Row, Col, Card, Button, Modal, Carousel } from 'react-bootstrap'
+import { toast } from 'react-toastify';
 import icon from '../ethereum-icon.png'  
 import './Home.css';
 
@@ -63,12 +64,43 @@ const Home = ({ marketplace, nft }) => {
     }
 
     const buyMarketItem = async (item) => {
+        try{
         await (await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })).wait()
         loadMarketplaceItems()
 
-        // Redirect to My Purchased Items page
-        navigate('/my-purchases');
-    }
+        // Show success alert
+        toast.success('Purchase successful!', {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+        });
+
+
+        // Delay the redirection after showing the success alert
+        setTimeout(() => {
+            navigate('/my-purchases');
+        }, 3200);
+        } catch (error) 
+            {
+            // Show error alert
+            toast.error('Purchase failed. Please try again later.', {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+
+            // You can also log the error to the console for debugging purposes
+            console.error('Purchase failed:', error.message);
+            }
+  };
 
     const [showModal, setShowModal] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState(null);
@@ -197,7 +229,7 @@ const Home = ({ marketplace, nft }) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-                <Row style={{ padding: '150px 10px 15px 10px'}}>
+                <Row style={{ padding: '50px 10px 15px 10px'}}>
                         <h5 style={{ fontFamily: 'Droid serif, serif' }}>
                             Total # of NFTs available for sale: <span className="blinking-stat">{totalListedNFTs}</span>
                         </h5>

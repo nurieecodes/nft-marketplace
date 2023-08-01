@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { ethers } from "ethers"
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Spinner } from 'react-bootstrap'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import './App.css';
 
@@ -47,7 +50,7 @@ function App() {
   }
   return (
     <HashRouter>
-      <div className="App" style={{ backgroundColor: '#ffe6e6', height: '1500px' }}
+      <div className="App" style={{ backgroundColor: '#ffe6e6', height: '5000px' }}
         >
         <Navigation web3Handler={web3Handler} account={account} />
         {loading ? (
@@ -71,6 +74,7 @@ function App() {
           } />
         </Routes>
       )}
+      <ToastContainer />
       </div>
     </HashRouter>
   );
