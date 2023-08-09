@@ -7,11 +7,12 @@ import icon from '../ethereum-icon.png'
 import upArrowIcon from '../arrow-up.png';
 import './Home.css';
 
-import image1 from '../images/image1.png';
-import image2 from '../images/image2.png';
-import image3 from '../images/image3.png';
-import image8 from '../images/image8.png';
-import image19 from '../images/image19.png';
+import image1 from '../carouselImages/Ape.png';
+import image2 from '../carouselImages/BigEars.png';
+import image3 from '../carouselImages/CoolCat.png';
+import image4 from '../carouselImages/Earrings.png';
+import image5 from '../carouselImages/PurpleHat.png';
+import image6 from '../carouselImages/YellowHat.png';
 
 
 const Home = ({ marketplace, nft }) => {
@@ -29,7 +30,7 @@ const Home = ({ marketplace, nft }) => {
     const navigate = useNavigate();
 
     // Array for the carousel that appears when there are no listed items available for purchase
-    const carouselImages = [image1, image2, image3, image8, image19]
+    const carouselImages = [image1, image2, image3, image4, image5, image6]
 
     const loadMarketplaceItems = async () => {
         const itemCount = await marketplace.itemCount()
