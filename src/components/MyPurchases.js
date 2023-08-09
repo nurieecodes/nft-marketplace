@@ -70,7 +70,7 @@ export default function MyPurchases({ marketplace, nft, account }) {
             {purchases.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card border="dark">
-                  <Card.Img variant="top" src={item.image} />
+                  <Card.Img variant="top" src={item.image} className="custom-card-image" />
                   <Card.Body color="secondary">
                                     <Card.Title>{item.name}</Card.Title>
                                     <Card.Text>

@@ -161,6 +161,7 @@ const Home = ({ marketplace, nft }) => {
                                 <Card.Img 
                                     variant="top" 
                                     src={item.image}
+                                    className="custom-card-image"
                                 />
                                 <Card.Body color="secondary">
                                     <Card.Title>{item.name}</Card.Title>
