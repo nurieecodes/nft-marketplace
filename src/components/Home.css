@@ -20,3 +20,24 @@
   max-height: 286px; 
   object-fit: cover; 
 }
+
+.scroll-button {
+  position: fixed;
+  bottom: 40px;
+  right: 50px;
+  background-color: #ff6666; 
+  color: #fff;
+  border: #000000;
+  border-radius: 100%;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 10px;
+  transition: background-color 0.3s;
+}
+
+.scroll-button:hover {
+  background-color: #9900cc;
+  color: #000000;
+  border: #000000;
+  border-radius: 100%;
+}

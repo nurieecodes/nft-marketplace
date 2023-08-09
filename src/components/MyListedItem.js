@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import icon from '../ethereum-icon.png';
+import upArrowIcon from '../arrow-up.png';
+import './MyListedItems.css';
 
 export default function MyListedItem({ marketplace, nft, account }) {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState(null);
   const [ownerAddress, setOwnerAddress] = useState('');
   const [unsoldItems, setUnsoldItems] = useState([]);
@@ -61,6 +64,20 @@ export default function MyListedItem({ marketplace, nft, account }) {
 
   useEffect(() => {
     loadListedItems();
+
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+          setShowScrollButton(true);
+      } else {
+          setShowScrollButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   if (loading)
@@ -207,6 +224,14 @@ export default function MyListedItem({ marketplace, nft, account }) {
             <h4 style={{ fontFamily: 'Droid serif, serif' }}>You currently have no sold items.</h4>
           </main>
         )}
+          {showScrollButton && (
+                <button
+                    className="scroll-button"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                    <img src={upArrowIcon} alt="Scroll to top" />
+                </button>
+            )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { ethers } from "ethers"
 import { Row, Col, Card, Button, Modal, Carousel } from 'react-bootstrap'
 import { toast } from 'react-toastify';
 import icon from '../ethereum-icon.png'  
+import upArrowIcon from '../arrow-up.png';
 import './Home.css';
 
 import image1 from '../images/image1.png';
@@ -20,6 +21,9 @@ const Home = ({ marketplace, nft }) => {
     // State variables to capture statistics
     const [totalListedNFTs, setTotalListedNFTs] = useState(0);
     const [totalSoldNFTs, setTotalSoldNFTs] = useState(0);
+
+    // State variable for the scroll-to-top button
+    const [showScrollButton, setShowScrollButton] = useState(false);
 
     // Variable for rerouting to the My Purchased Items page after successfully purchasing an NFT
     const navigate = useNavigate();
@@ -89,19 +93,19 @@ const Home = ({ marketplace, nft }) => {
         }, 3200);
         } catch (error) 
             {
-            // Show error alert
-            toast.error('Purchase failed. Please try again later.', {
-                position: 'top-center',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-            });
+                // Show error alert
+                toast.error('Purchase failed. Please try again later.', {
+                    position: 'top-center',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
 
-            // You can also log the error to the console for debugging purposes
-            console.error('Purchase failed:', error.message);
+                // You can also log the error to the console for debugging purposes
+                console.error('Purchase failed:', error.message);
             }
   };
 
@@ -126,11 +130,24 @@ const Home = ({ marketplace, nft }) => {
     useEffect(() => {
         loadMarketplaceItems();
 
+        const handleScroll = () => {
+            if (window.scrollY > 300) {
+                setShowScrollButton(true);
+            } else {
+                setShowScrollButton(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
         // Set up an interval to periodically update the statistics (e.g., every 10 seconds)
         const interval = setInterval(loadMarketplaceItems, 10000);
 
         // Clear the interval when the component is unmounted
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('scroll', handleScroll);
+        }
     }, []);
 
     if (loading) return (
@@ -241,6 +258,14 @@ const Home = ({ marketplace, nft }) => {
                             Total # of NFTs sold on the marketplace: <span className="blinking-stat">{totalSoldNFTs}</span>
                         </h5>
                     </Row>
+                    {showScrollButton && (
+                        <button
+                            className="scroll-button"
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        >
+                            <img src={upArrowIcon} alt="Scroll to top" />
+                        </button>
+                    )}
             </div>
             : (
                 <div className="px-5 container">
