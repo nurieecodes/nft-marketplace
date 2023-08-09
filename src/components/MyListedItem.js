@@ -65,13 +65,13 @@ export default function MyListedItem({ marketplace, nft, account }) {
 
   if (loading)
     return (
-      <main style={{ padding: '50px 10px 15px 10px' }}>
-        <h4>Loading...</h4>
+      <main style={{ padding: '50px 10px 15px 10px', paddingTop: '110px' }}>
+        <h3 style={{ fontFamily: 'Droid serif, serif' }}>Loading...</h3>
       </main>
     );
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" style={{ paddingTop: '60px' }}>
       <div className="px-5 py-3 container">
         {unsoldItems.length > 0 && (
           <>

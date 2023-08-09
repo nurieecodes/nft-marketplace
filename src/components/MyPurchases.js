@@ -58,14 +58,16 @@ export default function MyPurchases({ marketplace, nft, account }) {
     loadPurchasedItems()
   }, [])
   if (loading) return (
-    <main style={{ padding: '50px 10px 15px 10px' }}>
-      <h4>Loading...</h4>
+    <main style={{ padding: '50px 10px 15px 10px', paddingTop: '110px' }}>
+      <h4 style={{ fontFamily: 'Droid serif, serif' }}>Loading...</h4>
     </main>
   )
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" style={{ paddingTop: '75px' }}>
       {purchases.length > 0 ?
         <div className="px-5 container">
+          <h3 style={{ padding: '35px 0px 0px 0px', fontFamily: 'Droid serif, serif' }}>Have a look at the NFTs you own!</h3>
+          <hr />
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
             {purchases.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">

@@ -134,15 +134,15 @@ const Home = ({ marketplace, nft }) => {
     }, []);
 
     if (loading) return (
-        <main style={{ padding: '50px 10px 15px 10px' }}>
-            <h4 style={{ fontFamily: 'Droid serif, serif' }}>
+        <main style={{ padding: '50px 10px 15px 10px', paddingTop: '115px' }}>
+            <h3 style={{ fontFamily: 'Droid serif, serif' }}>
                 Loading...
-            </h4>
+            </h3>
         </main>
     )
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center" style={{ paddingTop: '80px' }}>
             {items.length > 0 ?
             <div className="px-5 container"> 
                 <Row>

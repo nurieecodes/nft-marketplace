@@ -2,10 +2,11 @@ import { NavLink } from "react-router-dom"
 import { Nav, Navbar, Button, Container } from 'react-bootstrap'
 import island from '../island.png'
 import '../index.css';
+import './Navigation.css';
 
 const Navigation = ({ web3Handler, account }) => {
   return (
-    <Navbar style={{ backgroundColor: '#000000'}} expand="lg" variant="dark">
+    <Navbar style={{ backgroundColor: "#000000" }} expand="lg" variant="dark">
         <Container>
             <Navbar.Brand href="#">
                 <img src={island} width="40" height="40" className="d-inline-block align-center" alt="" />

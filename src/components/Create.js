@@ -128,7 +128,7 @@ const Create = ({ marketplace, nft }) => {
         
     }
     return (
-        <div className="container-fluid mt-5">
+        <div className="container-fluid mt-5" style={{ paddingTop: '65px' }}>
             <div className="row">
                 <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '525px' }}>
                     <div className="content mx-auto">
