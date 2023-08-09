@@ -79,6 +79,9 @@ const Create = ({ marketplace, nft }) => {
         // Delay the redirection after showing the success alert
         setTimeout(() => {
             navigate('/');
+
+        // Scroll to the top of the page after navigating to the Home page
+        window.scrollTo(0, 0);
         }, 1500);
 
         } catch(error) {

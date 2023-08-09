@@ -83,6 +83,9 @@ const Home = ({ marketplace, nft }) => {
         // Delay the redirection after showing the success alert
         setTimeout(() => {
             navigate('/my-purchases');
+            
+            // Scroll to the top of the page after navigating to the My Purchased Items page
+            window.scrollTo(0, 0);
         }, 3200);
         } catch (error) 
             {
@@ -112,7 +115,7 @@ const Home = ({ marketplace, nft }) => {
 
         // Fetch the NFT owner's address
         const owner = await nft.ownerOf(item.itemId);
-        setOwnerAddress(owner);
+        setOwnerAddress(owner); 
     };
     
     const handleCloseModal = () => {
@@ -141,7 +144,7 @@ const Home = ({ marketplace, nft }) => {
     return (
         <div className="flex justify-center">
             {items.length > 0 ?
-            <div className="px-5 container">
+            <div className="px-5 container"> 
                 <Row>
                     <h3 style={{ padding: '35px 10px 0px 10px', 
                                 fontFamily: 'Georgia, arial, serif' }}>
@@ -229,7 +232,7 @@ const Home = ({ marketplace, nft }) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-                <Row style={{ padding: '50px 10px 15px 10px'}}>
+                <Row style={{ padding: '90px 10px 15px 10px'}}>
                         <h5 style={{ fontFamily: 'Droid serif, serif' }}>
                             Total # of NFTs available for sale: <span className="blinking-stat">{totalListedNFTs}</span>
                         </h5>
@@ -237,7 +240,6 @@ const Home = ({ marketplace, nft }) => {
                             Total # of NFTs sold on the marketplace: <span className="blinking-stat">{totalSoldNFTs}</span>
                         </h5>
                     </Row>
-
             </div>
             : (
                 <div className="px-5 container">
@@ -266,7 +268,7 @@ const Home = ({ marketplace, nft }) => {
                         <h4 style={{ fontFamily: 'Droid serif, serif' }}>
                             Please check back again soon.</h4>
                     </main>
-                    <Row style={{ padding: '150px 10px 15px 10px'}}>
+                    <Row style={{ padding: '90px 10px 15px 10px'}}>
                         <h5 style={{ fontFamily: 'Droid serif, serif' }}>
                             Total # of NFTs available for sale: <span className="blinking-stat">{totalListedNFTs}</span>
                         </h5>

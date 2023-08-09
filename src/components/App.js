@@ -4,8 +4,6 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Spinner } from 'react-bootstrap'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
 import './App.css';
 
 // Components 

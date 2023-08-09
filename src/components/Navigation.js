@@ -17,11 +17,11 @@ const Navigation = ({ web3Handler, account }) => {
                     <NavLink to="/" style={({ isActive }) => isActive ? { color: '#ff6666' } : { color: '#ffffff'}}>Home</NavLink>
                     <NavLink to="/create" style={({ isActive }) => isActive ? { color: '#ff6666' } : { color: '#ffffff'}}>Create</NavLink>
                     <NavLink to="/my-listed-item" style={({ isActive }) => isActive ? { color: '#ff6666' } : { color: '#ffffff'}}>My Listed Items</NavLink>
-                    <NavLink to="/my-purchases" style={({ isActive }) => isActive ? { color: '#ff6666' } : { color: '#ffffff'}}>Purchased Items</NavLink>
+                    <NavLink to="/my-purchases" style={({ isActive }) => isActive ? { color: '#ff6666' } : { color: '#ffffff'}}>My Purchased Items</NavLink>
                 </Nav>
                 <Nav>
                     {account ? (
-                        <NavLink
+                        <a
                               href={`https://etherscan.io/address/${account}`}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -29,13 +29,13 @@ const Navigation = ({ web3Handler, account }) => {
                               <Button style={{ color: '#000000', backgroundColor: '#ff6666', border: '#000000', borderRadius: 25, marginLeft: "125px" }} variant="primary">
                                   {account.slice(0, 5) + '...' + account.slice(38, 42)}
                               </Button>
-                        </NavLink>
+                        </a>
                     ) : (
                         <Button style={{ backgroundColor: '#9900cc', border: '#000000', borderRadius: 25, marginLeft: "183px" }} 
                                 onClick={web3Handler} 
                                 variant="primary">
                                     Connect Wallet
-                                </Button>
+                        </Button>
                     )}
                 </Nav>
             </Navbar.Collapse>
