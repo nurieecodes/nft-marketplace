@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ethers } from "ethers"
-import { Row, Col, Card, Button, Modal, Carousel } from 'react-bootstrap'
+import { Row, Col, Card, Button, Modal, Carousel, Spinner } from 'react-bootstrap'
 import { toast } from 'react-toastify';
 import icon from '../ethereum-icon.png'  
 import upArrowIcon from '../arrow-up.png';
@@ -153,9 +153,9 @@ const Home = ({ marketplace, nft }) => {
 
     if (loading) return (
         <main style={{ padding: '50px 10px 15px 10px', paddingTop: '115px' }}>
-            <h3 style={{ fontFamily: 'Droid serif, serif' }}>
-                Loading...
-            </h3>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '10vh' }}>
+            <Spinner animation="border" style={{ display: 'flex'}} variant="danger"/>
+          </div>        
         </main>
     )
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { Row, Col, Card, Button, Modal } from 'react-bootstrap';
+import { Row, Col, Card, Button, Modal, Spinner } from 'react-bootstrap';
 import icon from '../ethereum-icon.png';
 import upArrowIcon from '../arrow-up.png';
 import './MyListedItems.css';
@@ -83,7 +83,9 @@ export default function MyListedItem({ marketplace, nft, account }) {
   if (loading)
     return (
       <main style={{ padding: '50px 10px 15px 10px', paddingTop: '110px' }}>
-        <h3 style={{ fontFamily: 'Droid serif, serif' }}>Loading...</h3>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '10vh' }}>
+            <Spinner animation="border" style={{ display: 'flex'}} variant="danger"/>
+          </div>       
       </main>
     );
 
@@ -172,7 +174,7 @@ export default function MyListedItem({ marketplace, nft, account }) {
         )}
 
         {unsoldItems.length === 0 && (
-          <main style={{ padding: '50px 10px 15px 10px' }}>
+          <main style={{ padding: '20px 10px 15px 10px' }}>
             <h3 style={{ padding: '35px 0px 0px 0px', fontFamily: 'Droid serif, serif' }}>Listed NFTs</h3>
             <hr />
             <h4 style={{ fontFamily: 'Droid serif, serif' }}>You currently have no listed items.</h4>

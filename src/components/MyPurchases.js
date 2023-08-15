@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
-import { Row, Col, Card, Button, Modal } from 'react-bootstrap'
+import { Row, Col, Card, Button, Modal, Spinner } from 'react-bootstrap'
 import icon from '../ethereum-icon.png'
 import upArrowIcon from '../arrow-up.png';
 import './MyPurchases.css';
@@ -77,7 +77,9 @@ export default function MyPurchases({ marketplace, nft, account }) {
   }, [])
   if (loading) return (
     <main style={{ padding: '50px 10px 15px 10px', paddingTop: '110px' }}>
-      <h4 style={{ fontFamily: 'Droid serif, serif' }}>Loading...</h4>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '10vh' }}>
+          <Spinner animation="border" style={{ display: 'flex'}} variant="danger"/>
+        </div>       
     </main>
   )
   return (
