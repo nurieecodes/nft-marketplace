@@ -1,7 +1,19 @@
 {
   "31337": {
-    "token": {
-      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+    "nft": {
+      "address": "0x0777D7d2879f37179d937fBcC5C97cf9C2cDFD33"
+    },
+    "marketplace": {
+      "address": "0xBA7BdeEc39E47469F1D6FAAf54f3d06bA1D4dc6b"
+    }
+  },
+
+  "11155111": {
+    "nft": {
+      "address": "0x0777D7d2879f37179d937fBcC5C97cf9C2cDFD33"
+    },
+    "marketplace": {
+      "address": "0xBA7BdeEc39E47469F1D6FAAf54f3d06bA1D4dc6b"
     }
   }
 }
